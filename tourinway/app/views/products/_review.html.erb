@@ -1,0 +1,9 @@
+<li>
+  <a href="/users/<%= review.user_id %>" ><%= review.user.nickname %>さん</a><br />
+  <%= br(review.review) %>
+  <% unless current_user.nil? %>
+    <% if current_user.id == review.user_id %>
+      <%= link_to '削除', product_review_path(@product, review), method: :delete, remote: true %>
+    <% end %>
+  <% end %><br />
+</li><br />
