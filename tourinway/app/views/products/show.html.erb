@@ -1,0 +1,51 @@
+詳細ページです。<br />
+
+<p>タイトル：<%= @product.title %></p>
+<p>目的地：<%= @product.destination %></p>
+<p><%= @product.departure %>⇨<%= @product.arrival %></p>
+<p>コメント：<%= br(@product.detail) %></p>
+<% @productimage.each do |a| %>
+  <a href="<%= a.image_url %>" data-lightbox="任意の名前"><img src="<%= a.image_url %>" /></a>
+<% end %>
+
+<div style='width: 800px;'>
+  <div id="map" style='width: 600px; height: 400px;'></div>
+</div>
+
+<% unless current_user.nil? %>
+  <% if @product.user_id == current_user.id %>
+    <br /><a href="/products/<%= @product.id %>/edit" >投稿編集</a>
+    <a href="/products/<%= @product.id %>" data-method="delete" >投稿削除</a>
+  <% end %>
+<% end %><br />
+
+
+<% if user_signed_in? %>
+  <%= form_for [@product, @review], remote: true do |f| %>
+    <%= f.text_area :review, :size => "50x5", placeholder: "コメントを入力"%>
+    <%= hidden_field_tag(:product_id, params[:id]) %>
+    <%= f.submit 'コメントする' %>
+  <% end %>
+<% end %>
+
+<p>コメント一覧</p>
+<ul>
+  <%= render partial: "products/review", collection: @reviews %>
+</ul>
+
+<br /><%= link_to "ホームに戻る", root_path %>
+
+<script type="text/javascript">
+  handler = Gmaps.build('Google');
+  handler.buildMap({ provider: {}, internal: {id: 'map'}}, function(){
+    markers = handler.addMarkers(<%=raw @hash.to_json %>);
+    handler.bounds.extendWith(markers);
+    handler.fitMapToBounds();
+    handler.getMap().setZoom(14);
+  });
+  lightbox.option({
+    'resizeDuration' :400,
+    'wrapAround' :true
+  });
+  lightbox.init()
+</script>

@@ -1,0 +1,4 @@
+<h2>検索結果（<%= params[:departure] %>⇨<%= params[:arrival] %>、キーワード：<%= params[:keyword] %>）</h2><br />
+<%= render partial: "product", collection: @products %>
+
+<%= link_to "ホームに戻る", root_path %>

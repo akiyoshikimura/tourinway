@@ -1,0 +1,17 @@
+<p><%= @user.nickname %>さんのマイページです。</p>
+<p>愛車：<%= @user.bike %></p>
+<img src="<%= @user.avatar.url %>">
+
+<% unless current_user.nil? %>
+  <% if current_user.id == @user.id %>
+    <p>シークレットキー：<%= @user.rand %></p>
+    <div class="profile_edit">
+      <%= link_to "プロフィール編集", edit_user_path(current_user) %>
+    </div>
+  <% end %>
+<% end %><br />
+
+<h2><%= @user.nickname %>さんの投稿一覧</h2>
+<%= render partial: "product", collection: @products %>
+
+<%= link_to "ホームに戻る", root_path %>
